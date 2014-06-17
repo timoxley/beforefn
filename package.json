@@ -24,5 +24,11 @@
   "bugs": {
     "url": "https://github.com/timoxley/beforefn/issues"
   },
-  "homepage": "https://github.com/timoxley/beforefn"
+  "homepage": "https://github.com/timoxley/beforefn",
+  "keywords": [
+    "aspect",
+    "aop",
+    "functional",
+    "oriented"
+  ]
 }
