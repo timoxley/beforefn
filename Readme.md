@@ -50,6 +50,11 @@ console.log(addByTen(1,2)) // => 30
 * Original function will be passed as the third argument to the before function.
 * Original function `this` context is maintained.
 
+## See Also
+
+* [timoxley/guardfn](http://github.com/timoxley/guardfn)
+* [timoxley/afterfn](http://github.com/timoxley/afterfn)
+
 ## License
 
 MIT
