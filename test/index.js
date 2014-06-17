@@ -33,6 +33,15 @@ test('before is passed args', function(t) {
   })(1,2,3)
 })
 
+test('before is passed args on fn', function(t) {
+  t.plan(2)
+  before(function(a, b, c) {
+    t.deepEqual([].slice.call(arguments), [1,2,3])
+  }, function fn() {
+    t.deepEqual(fn.args, [1,2,3])
+  })(1,2,3)
+})
+
 test('returns correct value', function(t) {
   var result = before(function(a, b) {
     return a + b
@@ -43,11 +52,11 @@ test('returns correct value', function(t) {
   t.end()
 })
 
-test('before.args allows changing args', function(t) {
-  var result = before.args(function(a, b) {
+test('before allows changing args via fn.args', function(t) {
+  var result = before(function(a, b) {
     return a + b
-  }, function(a, b) {
-    return [a * 10, b * 10]
+  }, function fn(a, b) {
+    fn.args = [a * 10, b * 10]
   })
   t.equal(result(2,3), 50)
   t.end()

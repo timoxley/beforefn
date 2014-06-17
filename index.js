@@ -1,6 +1,7 @@
 "use strict"
 
 module.exports = beforeQueue
+var slice = require('sliced')
 
 function beforeQueue(fn, beforeFn) {
   if (fn.__beforeFns) {
@@ -15,16 +16,15 @@ function beforeQueue(fn, beforeFn) {
   function before() {
     var context = this
     var args = fns.reduce(function(args, doBefore) {
-      var newArgs = doBefore.apply(context, args)
-      if (!doBefore.__args) return args
+      doBefore.args = slice(args)
+      doBefore.fn = fn
+      doBefore.apply(context, doBefore.args)
+      var newArgs = doBefore.args
+      delete doBefore.args
+      delete doBefore.fn
       return newArgs
     }, arguments)
     return fn.apply(this, args)
   }
   return before
-}
-
-beforeQueue.args = function beforeQueueArgs(fn, beforeFn) {
-  beforeFn.__args = true
-  return beforeQueue(fn, beforeFn)
 }

@@ -16,6 +16,7 @@
   },
   "description": "Execute a function before a function.",
   "dependencies": {
+    "sliced": "0.0.5"
   },
   "repository": {
     "type": "git",
