@@ -1,0 +1,28 @@
+{
+  "name": "beforefn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test"
+  },
+  "author": "Tim Oxley",
+  "license": "MIT",
+  "devDependencies": {
+    "tape": "^2.13.3"
+  },
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "description": "Execute a function before a function.",
+  "dependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timoxley/beforefn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timoxley/beforefn/issues"
+  },
+  "homepage": "https://github.com/timoxley/beforefn"
+}
