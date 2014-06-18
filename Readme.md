@@ -102,6 +102,41 @@ console.log(user.name) // => 'hodor'
 
 ```
 
+## Performance
+
+As of `beforefn` 2.2.0, `beforefn` performs comparably to a manually replaced function. 
+
+```
+iterations 700000
+...
+366ms - manually replaced function
+299ms - using before function
+...
+```
+
+```js
+
+test('manually replaced function', function() {
+  var user = setup()
+  var s = user.speak
+  user.speak = function() {
+    this.name = this.name.toUpperCase()
+    return s.apply(this, arguments)
+  }
+  user.speak()
+})
+
+test('using before function', function() {
+  var user = setup()
+  function a() {
+    this.name = this.name.toUpperCase()
+  }
+  user.speak = before(user.speak, a)
+  user.speak()
+})
+```
+Other runnable benchmarks are located in [bench/index](/bench/index).
+
 ## API Facts
 
 * `beforefn` returns a new Function.
