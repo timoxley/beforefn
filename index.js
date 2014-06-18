@@ -10,7 +10,6 @@ function beforeQueue(fn, beforeFn) {
   }
 
   var fns = before.__beforeFns = before.__beforeFns || []
-  fn.__beforeFns = fns
   fns.push(beforeFn)
 
   function before() {

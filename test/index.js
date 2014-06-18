@@ -79,3 +79,41 @@ test('chain executes in order of definition', function(t) {
   t.equal(result(2,3), 5)
   t.end()
 })
+
+test('does not mess with prototype functions', function(t) {
+
+  function User(name) {
+    this.name = name
+  }
+
+  User.prototype.speak = function() {
+    return this.name
+  }
+
+  var bill = new User('bill')
+  var bob = new User('bob')
+
+  var called = []
+
+  bill.speak = before(bill.speak, function() {
+    called.push('bill')
+  })
+
+  bob.speak = before(bob.speak, function() {
+    called.push('bob')
+  })
+
+  t.equal(bill.speak(), 'bill')
+  t.deepEqual(called, ['bill'])
+
+  t.equal(bob.speak(), 'bob')
+  t.deepEqual(called, ['bill', 'bob'])
+
+  t.equal(bill.speak(), 'bill')
+  t.deepEqual(called, ['bill', 'bob', 'bill'])
+
+  t.equal(bob.speak(), 'bob')
+  t.deepEqual(called, ['bill', 'bob', 'bill', 'bob'])
+
+  t.end()
+})
