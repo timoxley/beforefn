@@ -28,11 +28,53 @@ test('before can be passed context', function(t) {
   t.plan(2)
   var oldContext = {}
   var newContext = {}
+
   var fn = before(function() {
-    t.equal(this, newContext)
+    t.equal(this, oldContext)
   }, function() {
     t.equal(this, newContext)
   }, newContext)
+
+  fn.call(oldContext)
+})
+
+test('each before maintains its own context', function(t) {
+  t.plan(5)
+  var contextA = {name: 'a'}
+  var contextB = {name: 'b'}
+  var contextC = {name: 'c'}
+  var contextD = {name: 'd'}
+
+  function op() {
+    t.equal(this, contextC)
+  }
+
+  var A = before(op, function() {
+    t.equal(this, contextA)
+  }, contextA)
+
+  var B = before(A, function() {
+    t.equal(this, contextB)
+  }, contextB)
+
+  var D = before(op, function() {
+    t.equal(this, contextD)
+  }, contextD)
+
+  B.call(contextC)
+  D.call(contextC)
+})
+
+test('context can be adjusted', function(t) {
+  t.plan(2)
+  var oldContext = {}
+  var newContext = {}
+  var fn = before(function() {
+    t.equal(this, newContext)
+  }, function fn() {
+    t.equal(this, oldContext)
+    fn.context = newContext
+  })
 
   fn.call(oldContext)
 })

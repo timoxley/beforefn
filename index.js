@@ -1,29 +1,59 @@
 "use strict"
 
-module.exports = beforeQueue
 var slice = require('sliced')
 
+module.exports = beforeQueue
+
 function beforeQueue(fn, beforeFn, overrideContext) {
+  if (overrideContext) beforeFn.__context = overrideContext
   if (fn.__beforeFns) {
     fn.__beforeFns.push(beforeFn)
     return fn
   }
 
-  var fns = before.__beforeFns = before.__beforeFns || []
-  fns.push(beforeFn)
+  before.__beforeFns = [beforeFn]
 
   function before() {
-    var context = overrideContext || this
-    var args = fns.reduce(function(args, doBefore) {
-      doBefore.args = slice(args)
+    var self = this
+
+    var fns = before.__beforeFns
+    var fnArgs = slice(arguments)
+    var fnContext = undefined
+
+    // for loop because performance
+    for (var i = 0; i < fns.length; i++) {
+      var doBefore = fns[i]
+      var args = fnArgs
+
+      var context = self
+      if (fnContext) context = fnContext
+      else if (doBefore.__context) context = doBefore.__context
+
+      // execution information is stored on doBefore function itself
+      doBefore.args = args
       doBefore.fn = fn
-      doBefore.apply(context, doBefore.args)
-      var newArgs = doBefore.args
-      delete doBefore.args
-      delete doBefore.fn
-      return newArgs
-    }, arguments)
-    return fn.apply(context, args)
+      doBefore.context = context
+
+      doBefore.apply(doBefore.context, doBefore.args)
+
+      // extract args/context which may have changed during execution of doBefore
+      if (doBefore.args !== args) {
+        fnArgs = doBefore.args
+        if (fnArgs.forEach) {}
+        else fnArgs = slice(fnArgs)
+      }
+
+      // if we have a new context
+      fnContext = (doBefore.context !== context) ? doBefore.context : undefined
+
+      // for good measure remove properties we added on doBefore
+      doBefore.args = undefined
+      doBefore.fn = undefined
+      doBefore.context = undefined
+    }
+
+    var finalContext = fnContext ? fnContext : self
+    return fn.apply(finalContext, fnArgs)
   }
   return before
 }

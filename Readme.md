@@ -2,7 +2,7 @@
 
 #### Execute a function before a function.
 
-## Example
+## Examples
 
 ```js
 var before = require('beforefn')
@@ -33,8 +33,8 @@ function add(a, b) {
   return a + b
 }
 
-var addByTen = before(add, function fn(a,b) {
-  fn.args = [a * 10, b * 10]
+var addByTen = before(add, function fn(a, b) {
+  fn.args = fn.args.map(function(x) { return x * 10 })
 })
 
 console.log(add(1,2)) // => 3
@@ -53,13 +53,52 @@ var user = {
   }
 }
 
-var speak = before(user.speak, function() {
+user.speak = before(user.speak, function() {
+  this.name = this.name[0].toUpperCase() + this.name.slice(1)
+}, user)
+
+
+console.log(user.speak()) // => 'Hodor'
+
+// Reset name
+user.name = 'hodor'
+
+// Original function runs in call-time context
+console.log(user.speak.call({name: 'bran'})) // => 'bran'
+
+// But the before function runs in context set when defined
+console.log(user.name) // => 'Hodor'
+
+```
+
+### Adjust Context
+
+```js
+
+var user = {
+  name: 'hodor',
+  speak: function() {
+    return this.name
+  }
+}
+
+user.speak = before(user.speak, function fn() {
+  // make 'this' in all 'befores' effectively immutable
+  fn.context = Object.create(this)
+})
+
+user.speak = before(user.speak, function fn() {
   this.name = this.name[0].toUpperCase() + this.name.slice(1)
 }, user)
 
 
 console.log(speak()) // => 'Hodor'
-console.log(speak.call({name: 'bran'})) // => 'Hodor'
+
+// the 'this' was altered when the function ran,
+// but the original object is unmodified due to
+// the Object.create(this)
+
+console.log(user.name) // => 'hodor'
 
 ```
 
