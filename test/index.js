@@ -24,6 +24,19 @@ test('before maintains context', function(t) {
   }).apply(context)
 })
 
+test('before can be passed context', function(t) {
+  t.plan(2)
+  var oldContext = {}
+  var newContext = {}
+  var fn = before(function() {
+    t.equal(this, newContext)
+  }, function() {
+    t.equal(this, newContext)
+  }, newContext)
+
+  fn.call(oldContext)
+})
+
 test('before is passed args', function(t) {
   t.plan(2)
   before(function(a, b, c) {

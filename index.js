@@ -3,7 +3,7 @@
 module.exports = beforeQueue
 var slice = require('sliced')
 
-function beforeQueue(fn, beforeFn) {
+function beforeQueue(fn, beforeFn, overrideContext) {
   if (fn.__beforeFns) {
     fn.__beforeFns.push(beforeFn)
     return fn
@@ -13,7 +13,7 @@ function beforeQueue(fn, beforeFn) {
   fns.push(beforeFn)
 
   function before() {
-    var context = this
+    var context = overrideContext || this
     var args = fns.reduce(function(args, doBefore) {
       doBefore.args = slice(args)
       doBefore.fn = fn
@@ -23,7 +23,7 @@ function beforeQueue(fn, beforeFn) {
       delete doBefore.fn
       return newArgs
     }, arguments)
-    return fn.apply(this, args)
+    return fn.apply(context, args)
   }
   return before
 }
