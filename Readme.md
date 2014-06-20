@@ -1,11 +1,26 @@
 # beforefn
+Execute a function before a function.
 
-#### Execute a function before a function.
+```js
+var before = require('beforefn')
+
+// replace user.save with a function that executes
+// customBeheviour() before every .save  call
+user.save = before(user.save, function() {
+  customBehaviour()
+})
+
+// roughly equivalent to
+var oldSave = user.oldSave
+user.save = function() {
+  customBehaviour()
+  return oldSave.apply(this, arguments)
+}
+```
 
 ## Examples
 
 ```js
-var before = require('beforefn')
 
 var user = {
   name: 'tim oxley',
