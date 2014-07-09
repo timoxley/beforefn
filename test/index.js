@@ -172,3 +172,28 @@ test('does not mess with prototype functions', function(t) {
 
   t.end()
 })
+
+test('function keys are copied across', function(t) {
+  function Thing() {}
+  Thing.copied = true
+  var anotherThing = {}
+  Thing.prototype = anotherThing
+
+  var NewThing = before(Thing, function() {})
+  t.ok(NewThing.copied)
+  t.equal(NewThing.prototype, anotherThing)
+  t.end()
+})
+
+test('function keys are available on fn.fn', function(t) {
+  function Thing() {}
+  Thing.copied = true
+  var anotherThing = {}
+  Thing.prototype = anotherThing
+
+  before(Thing, function fn() {
+    t.ok(fn.fn.copied)
+    t.equal(fn.fn.prototype, anotherThing)
+    t.end()
+  })()
+})

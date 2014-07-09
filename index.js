@@ -12,7 +12,8 @@ function beforeQueue(fn, beforeFn, overrideContext) {
   }
 
   before.__beforeFns = [beforeFn]
-
+  before.__proto__ = fn
+  before.prototype = fn.prototype
   function before() {
     var self = this
 
