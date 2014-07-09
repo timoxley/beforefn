@@ -159,6 +159,7 @@ Other runnable benchmarks are located in [bench/index](/bench/index).
 * Original arguments will be passed as the second argument to the before function.
 * Original function will be passed as the third argument to the before function.
 * Original function `this` context is maintained.
+* Properties and prototype are inherited though function arity will not be preserved.
 
 ## See Also
 
