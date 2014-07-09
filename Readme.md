@@ -164,6 +164,7 @@ Other runnable benchmarks are located in [bench/index](/bench/index).
 
 * [timoxley/guardfn](http://github.com/timoxley/guardfn)
 * [timoxley/afterfn](http://github.com/timoxley/afterfn)
+* [timoxley/inheritfn](http://github.com/timoxley/inheritfn)
 
 ## License
 
