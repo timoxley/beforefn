@@ -29,7 +29,9 @@ function beforeQueue(fn, beforeFn, overrideContext) {
       var context = self
       if (fnContext) context = fnContext
       else if (doBefore.__context) context = doBefore.__context
-
+      var oldArgs = doBefore.args
+      var oldContext = doBefore.context
+      var oldFn = doBefore.fn
       // execution information is stored on doBefore function itself
       doBefore.args = args
       doBefore.fn = fn
@@ -40,17 +42,17 @@ function beforeQueue(fn, beforeFn, overrideContext) {
       // extract args/context which may have changed during execution of doBefore
       if (doBefore.args !== args) {
         fnArgs = doBefore.args
-        if (fnArgs.forEach) {}
-        else fnArgs = slice(fnArgs)
+        if (Array.isArray(fnArgs)) {}
+        else fnArgs = slice(fnArgs || [])
       }
 
       // if we have a new context
       fnContext = (doBefore.context !== context) ? doBefore.context : undefined
 
       // for good measure remove properties we added on doBefore
-      doBefore.args = undefined
-      doBefore.fn = undefined
-      doBefore.context = undefined
+      doBefore.args = oldArgs
+      doBefore.fn = oldFn
+      doBefore.context = oldContext
     }
 
     var finalContext = fnContext ? fnContext : self

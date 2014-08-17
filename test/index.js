@@ -197,3 +197,15 @@ test('function keys are available on fn.fn', function(t) {
     t.end()
   })()
 })
+
+test('recursive calls work correctly', function(t) {
+  t.plan(2)
+  var count = 0
+  var addOne = before(function(arg) {
+    return arg
+  }, function fn(arg) {
+    fn.args = [arg+1]
+    if (count++ < 1) t.equal(addOne(3), 4)
+  })
+  t.equal(addOne(0), 1)
+})
