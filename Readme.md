@@ -1,4 +1,5 @@
 # beforefn
+
 Execute a function before a function.
 
 ```js
