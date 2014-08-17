@@ -1,5 +1,5 @@
-var tape = require('tape')
 var before = require('../')
+var pkg = require('../package.json')
 
 function test(name, fn) {
   fn.testName = name
@@ -15,9 +15,8 @@ function run(test) {
   if (run.called) return
   run.called = true
   setTimeout(function() {
-    console.info('iterations', test.iterations)
     test.tests.forEach(function(fn) {
-      console.info('running %s', fn.testName)
+      console.error('running %s', fn.testName)
       var start = Date.now()
       for (var i = 0; i < test.iterations; i++) {
         fn()
@@ -25,9 +24,12 @@ function run(test) {
       var end = Date.now()
       fn.time = end - start
     })
-    console.info('\n--- Results ---')
+    console.info('\n### '+pkg.version+' Results ###')
+    console.info('')
+    console.info('iterations: ', test.iterations)
+    console.info('')
     test.tests.forEach(function(test) {
-      console.info('%dms - %s', test.time, test.testName)
+      console.info('* %dms - %s', test.time, test.testName)
     })
   })
 }

@@ -3,7 +3,8 @@
   "version": "2.3.0",
   "main": "index.js",
   "scripts": {
-    "test": "tape test"
+    "test": "tape test",
+    "bench": "node bench >> bench/Readme.md"
   },
   "author": "Tim Oxley",
   "license": "MIT",
