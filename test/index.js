@@ -209,3 +209,36 @@ test('recursive calls work correctly', function(t) {
   })
   t.equal(addOne(0), 1)
 })
+
+test('no error if args set to weird value', function(t) {
+  before(function() {
+    t.equal(arguments.length, 0)
+  }, function fn() {
+    fn.args = null
+  })()
+  before(function() {
+    t.equal(arguments.length, 0)
+  }, function fn() {
+    fn.args = {}
+  })()
+  before(function() {
+    t.equal(arguments.length, 0)
+  }, function fn() {
+    fn.args = false
+  })()
+  before(function() {
+    t.equal(arguments.length, 0)
+  }, function fn() {
+    fn.args = true
+  })()
+  before(function() {
+    // i guess this is sane behaviour?
+    t.deepEqual(arguments.length, 3)
+    t.equal(arguments[0], undefined)
+    t.equal(arguments[1], undefined)
+    t.equal(arguments[2], undefined)
+  }, function fn() {
+    fn.args = {length: 3}
+  })()
+  t.end()
+})
