@@ -1,6 +1,8 @@
 # beforefn
 
-Execute a function before a function.
+### Execute a function before a function.
+
+[![Build Status](https://travis-ci.org/timoxley/beforefn.svg)](https://travis-ci.org/timoxley/beforefn)
 
 ```js
 var before = require('beforefn')
