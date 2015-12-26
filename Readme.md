@@ -21,6 +21,19 @@ user.save = function() {
 }
 ```
 
+## API Facts
+
+* `beforefn` returns a new Function.
+* Original arguments will be passed as the second argument to the before function.
+* Original function will be passed as the third argument to the before function.
+* Properties and prototype are only inherited if you use `before.inherit`. Function arity will not be preserved.
+
+## Differences between beforefn 2.x and 3.x
+
+`beforefn` 3.x no longer inherits properties from the function you're
+wrapping. In many cases this is not needed, and the inheritance slows
+down beforefn by ~300%. Blame V8.
+
 ## Examples
 
 ```js
@@ -154,15 +167,6 @@ test('using before function', function() {
 })
 ```
 Other runnable benchmarks are located in [bench/index](/bench/index).
-
-## API Facts
-
-* `beforefn` returns a new Function.
-* `beforefn` ignores return value of before function
-* Original arguments will be passed as the second argument to the before function.
-* Original function will be passed as the third argument to the before function.
-* Original function `this` context is maintained.
-* Properties and prototype are inherited though function arity will not be preserved.
 
 ## See Also
 

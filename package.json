@@ -1,24 +1,33 @@
 {
   "name": "beforefn",
-  "version": "2.3.1",
-  "main": "index.js",
+  "version": "3.0.0",
+  "main": "beforefn.js",
   "scripts": {
-    "test": "tape test",
+    "pretest": "npm run prepublish",
+    "prepublish": "babel index.js > beforefn.js",
+    "test": "babel-node test/index.js",
     "bench": "node bench >> bench/Readme.md"
   },
   "author": "Tim Oxley",
   "license": "MIT",
   "devDependencies": {
-    "tape": "^2.13.3"
+    "acorn": "^2.6.4",
+    "babel": "^6.3.26",
+    "babel-cli": "^6.3.17",
+    "babel-preset-es2015": "^6.3.13",
+    "tape": "^4.4.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
   },
   "directories": {
     "example": "examples",
     "test": "test"
   },
   "description": "Execute a function before a function.",
-  "dependencies": {
-    "sliced": "^0.0.5"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/timoxley/beforefn.git"

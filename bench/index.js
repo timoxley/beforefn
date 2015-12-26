@@ -79,52 +79,56 @@ test('replaced function', function() {
   user.speak()
 })
 
-test('before function noop', function() {
-  var user = setup()
-  user.speak = before(user.speak, function() {})
-  user.speak()
-})
+TestBefore(before)
+TestBefore(before.inherit)
 
-test('before function', function() {
-  var user = setup()
-  function a() {
-    this.name = this.name.toUpperCase()
-  }
-  user.speak = before(user.speak, a)
-  user.speak()
-})
-
-test('before function with context', function() {
-  var user = setup()
-
-  function a() {
-    this.name = this.name.toUpperCase()
-  }
-
-  user.speak = before(user.speak, a, user)
-  user.speak()
-})
-
-test('before function changing context', function() {
-  var user = setup()
-  var newContext = {name: 'bob'}
-  user.speak = before(user.speak, function fn() {
-    this.name = this.name.toUpperCase()
-    fn.context = newContext
+function TestBefore(before) {
+  test(before.name + ' function noop', function() {
+    var user = setup()
+    user.speak = before(user.speak, function() {})
+    user.speak()
   })
-  user.speak()
-})
 
-test('before function changing args', function() {
-  var user = setup()
+  test(before.name + ' function', function() {
+    var user = setup()
+    function a() {
+      this.name = this.name.toUpperCase()
+    }
+    user.speak = before(user.speak, a)
+    user.speak()
+  })
 
-  user.speak = before(user.speak, function fn() {
-    this.name = this.name.toUpperCase()
-    fn.args[0] = 'Sup'
-  }, user)
-  user.speak()
-})
+  test(before.name + ' function with context', function() {
+    var user = setup()
 
+    function a() {
+      this.name = this.name.toUpperCase()
+    }
+
+    user.speak = before(user.speak, a, user)
+    user.speak()
+  })
+
+  test(before.name + ' function changing context', function() {
+    var user = setup()
+    var newContext = {name: 'bob'}
+    user.speak = before(user.speak, function fn() {
+      this.name = this.name.toUpperCase()
+      fn.context = newContext
+    })
+    user.speak()
+  })
+
+  test(before.name + ' function changing args', function() {
+    var user = setup()
+
+    user.speak = before(user.speak, function fn() {
+      this.name = this.name.toUpperCase()
+      fn.args[0] = 'Sup'
+    }, user)
+    user.speak()
+  })
+}
 var MULTIPLE = 10
 
 test('multiple ('+MULTIPLE+') inlined operations', function() {

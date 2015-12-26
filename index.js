@@ -1,8 +1,14 @@
 "use strict"
 
-var slice = require('sliced')
-
 module.exports = beforeQueue
+
+// inherit is pretty slow
+module.exports.inherit = function beforeInherit(fn, beforeFn, overrideContext) {
+  let before = beforeQueue(fn, beforeFn, overrideContext)
+  before.__proto__ = fn
+  before.prototype = fn.prototype
+  return before
+}
 
 function beforeQueue(fn, beforeFn, overrideContext) {
   if (overrideContext) beforeFn.__context = overrideContext
@@ -12,42 +18,40 @@ function beforeQueue(fn, beforeFn, overrideContext) {
   }
 
   before.__beforeFns = [beforeFn]
-  before.__proto__ = fn
-  before.prototype = fn.prototype
-  function before() {
-    var self = this
 
-    var fns = before.__beforeFns
-    var fnArgs = slice(arguments)
-    var fnContext = undefined
+  function before(...args) {
+    let self = this
+
+    let fns = before.__beforeFns
+    let fnArgs = args
+    let fnContext = undefined
 
     // for loop because performance
-    for (var i = 0; i < fns.length; i++) {
-      var doBefore = fns[i]
-      var args = fnArgs
+    for (let i = 0; i < fns.length; i++) {
+      let doBefore = fns[i]
+      let args = fnArgs
 
-      var context = self
+      let context = self
       if (fnContext) context = fnContext
       else if (doBefore.__context) context = doBefore.__context
-      var oldArgs = doBefore.args
-      var oldContext = doBefore.context
-      var oldFn = doBefore.fn
+      let oldArgs = doBefore.args
+      let oldContext = doBefore.context
+      let oldFn = doBefore.fn
       // execution information is stored on doBefore function itself
       doBefore.args = args
       doBefore.fn = fn
       doBefore.context = context
 
-      doBefore.apply(doBefore.context, doBefore.args)
+      doBefore.call(doBefore.context, ...doBefore.args)
 
       // extract args/context which may have changed during execution of doBefore
       if (doBefore.args !== args) {
         fnArgs = doBefore.args
-        if (Array.isArray(fnArgs)) {}
-        else fnArgs = slice(fnArgs || [])
+        if (!Array.isArray(fnArgs)) fnArgs = Array.from(fnArgs || [])
       }
 
       // if we have a new context
-      fnContext = (doBefore.context !== context) ? doBefore.context : undefined
+      fnContext = doBefore.context !== context ? doBefore.context : undefined
 
       // for good measure remove properties we added on doBefore
       doBefore.args = oldArgs
@@ -55,8 +59,8 @@ function beforeQueue(fn, beforeFn, overrideContext) {
       doBefore.context = oldContext
     }
 
-    var finalContext = fnContext ? fnContext : self
-    return fn.apply(finalContext, fnArgs)
+    let finalContext = fnContext ? fnContext : self
+    return fn.call(finalContext, ...fnArgs)
   }
   return before
 }
