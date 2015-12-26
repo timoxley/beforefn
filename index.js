@@ -42,7 +42,7 @@ function beforeQueue(fn, beforeFn, overrideContext) {
       doBefore.fn = fn
       doBefore.context = context
 
-      doBefore.call(doBefore.context, ...doBefore.args)
+      doBefore.apply(doBefore.context, doBefore.args)
 
       // extract args/context which may have changed during execution of doBefore
       if (doBefore.args !== args) {
@@ -60,7 +60,7 @@ function beforeQueue(fn, beforeFn, overrideContext) {
     }
 
     let finalContext = fnContext ? fnContext : self
-    return fn.call(finalContext, ...fnArgs)
+    return fn.apply(finalContext, fnArgs)
   }
   return before
 }
