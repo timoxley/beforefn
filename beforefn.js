@@ -1,7 +1,5 @@
 "use strict";
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 module.exports = beforeQueue;
 
 // inherit is pretty slow
@@ -48,7 +46,7 @@ function beforeQueue(fn, beforeFn, overrideContext) {
       doBefore.fn = fn;
       doBefore.context = context;
 
-      doBefore.call.apply(doBefore, [doBefore.context].concat(_toConsumableArray(doBefore.args)));
+      doBefore.apply(doBefore.context, doBefore.args);
 
       // extract args/context which may have changed during execution of doBefore
       if (doBefore.args !== _args) {
@@ -66,7 +64,7 @@ function beforeQueue(fn, beforeFn, overrideContext) {
     }
 
     var finalContext = fnContext ? fnContext : self;
-    return fn.call.apply(fn, [finalContext].concat(_toConsumableArray(fnArgs)));
+    return fn.apply(finalContext, fnArgs);
   }
   return before;
 }

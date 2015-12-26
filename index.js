@@ -23,7 +23,7 @@ function beforeQueue(fn, beforeFn, overrideContext) {
     const self = this
 
     const fns = before.__beforeFns
-    const fnArgs = args
+    let fnArgs = args
     let fnContext = undefined
 
     // for loop because performance
@@ -31,7 +31,7 @@ function beforeQueue(fn, beforeFn, overrideContext) {
       const doBefore = fns[i]
       const args = fnArgs
 
-      const context = self
+      let context = self
       if (fnContext) context = fnContext
       else if (doBefore.__context) context = doBefore.__context
       const oldArgs = doBefore.args
