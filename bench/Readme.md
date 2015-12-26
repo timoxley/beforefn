@@ -40,3 +40,26 @@ iterations:  700000
 * 4574ms - multiple (10) regular function replacements
 * 9139ms - multiple (10) befores
 * 9523ms - multiple (10) noop befores
+
+### 3.0.1 Results ###
+
+iterations:  700000
+
+* 106ms - calling vanilla function
+* 191ms - inlined code
+* 481ms - inlined functions
+* 404ms - replaced function
+* 329ms - beforeQueue function noop
+* 424ms - beforeQueue function
+* 429ms - beforeQueue function with context
+* 377ms - beforeQueue function changing context
+* 372ms - beforeQueue function changing args
+* 6966ms - beforeInherit function noop
+* 7325ms - beforeInherit function
+* 9146ms - beforeInherit function with context
+* 7779ms - beforeInherit function changing context
+* 6892ms - beforeInherit function changing args
+* 1405ms - multiple (10) inlined operations
+* 5126ms - multiple (10) regular function replacements
+* 3248ms - multiple (10) befores
+* 2446ms - multiple (10) noop befores

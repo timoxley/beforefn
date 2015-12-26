@@ -27,6 +27,7 @@ user.save = function() {
 * Original arguments will be passed as the second argument to the before function.
 * Original function will be passed as the third argument to the before function.
 * Properties and prototype are only inherited if you use `before.inherit`. Function arity will not be preserved.
+* To use with a constructor function, you'll need to use `before.inherit`.
 
 ## Differences between beforefn 2.x and 3.x
 
