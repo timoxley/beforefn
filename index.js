@@ -4,7 +4,7 @@ module.exports = beforeQueue
 
 // inherit is pretty slow
 module.exports.inherit = function beforeInherit(fn, beforeFn, overrideContext) {
-  let before = beforeQueue(fn, beforeFn, overrideContext)
+  const before = beforeQueue(fn, beforeFn, overrideContext)
   before.__proto__ = fn
   before.prototype = fn.prototype
   return before
@@ -20,23 +20,23 @@ function beforeQueue(fn, beforeFn, overrideContext) {
   before.__beforeFns = [beforeFn]
 
   function before(...args) {
-    let self = this
+    const self = this
 
-    let fns = before.__beforeFns
-    let fnArgs = args
+    const fns = before.__beforeFns
+    const fnArgs = args
     let fnContext = undefined
 
     // for loop because performance
     for (let i = 0; i < fns.length; i++) {
-      let doBefore = fns[i]
-      let args = fnArgs
+      const doBefore = fns[i]
+      const args = fnArgs
 
-      let context = self
+      const context = self
       if (fnContext) context = fnContext
       else if (doBefore.__context) context = doBefore.__context
-      let oldArgs = doBefore.args
-      let oldContext = doBefore.context
-      let oldFn = doBefore.fn
+      const oldArgs = doBefore.args
+      const oldContext = doBefore.context
+      const oldFn = doBefore.fn
       // execution information is stored on doBefore function itself
       doBefore.args = args
       doBefore.fn = fn
@@ -59,7 +59,7 @@ function beforeQueue(fn, beforeFn, overrideContext) {
       doBefore.context = oldContext
     }
 
-    let finalContext = fnContext ? fnContext : self
+    const finalContext = fnContext ? fnContext : self
     return fn.apply(finalContext, fnArgs)
   }
   return before
